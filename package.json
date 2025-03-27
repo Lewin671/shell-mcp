@@ -5,16 +5,21 @@
   "main": "index.js",
   "type": "module",
   "bin": {
-    "weather": "./build/index.js"
+    "start": "./build/index.js"
   },
   "scripts": {
-    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=build/index.js --minify --sourcemap",
+    "dev": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=build/index.js --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.13.14",
+    "esbuild": "^0.25.1",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0"
   }
 }
