@@ -14,10 +14,10 @@ let shell = new ShellExecutor();
 
 // Add an addition tool
 server.tool("execute", "execute a shell command",
-    { command: z.string() },
+    { command: z.string().optional() },
     async ({ command }) => {
         return {
-            content: [{ type: "text", text: await shell.execute(command) }]
+            content: [{ type: "text", text: command ? await shell.execute(command) : "No command provided" }]
         }
     }
 );
