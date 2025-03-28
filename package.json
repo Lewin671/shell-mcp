@@ -1,5 +1,5 @@
 {
-  "name": "@qingyingliu/shell-mcp",
+  "name": "shell-mcp",
   "version": "1.0.1",
   "description": "a shell executor for Model Context Protocol",
   "main": "index.js",
