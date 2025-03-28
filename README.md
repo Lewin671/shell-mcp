@@ -29,13 +29,13 @@ To make the LLMs interact with shell-mcp, you need to add the following configur
 2. Add the following configuration to your MCP configuration:
     ```js
     {
-    "mcpServers": {
-        "shell": {
-        "command": "node",
-        "args": [
-            "./build/index.js" // Path to the shell-mcp server
-        ]
+        "mcpServers": {
+            "shell": {
+                "command": "node",
+                "args": [
+                    "./build/index.js" // Path to the shell-mcp server
+                ]
+            }
         }
-    }
     }
     ```
