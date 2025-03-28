@@ -36,7 +36,7 @@ To make the LLMs interact with shell-mcp, you need to add the following configur
 	      "description": "execute shell commands",
 	      "command": "npx",
 	      "args": [
-	        "shell-mcp"
+	        "@qingyingliu/shell-mcp"
 	      ]
 	    }
 	  }
