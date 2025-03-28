@@ -5,7 +5,6 @@ import { IShellExecutor } from './interfaces/shell.js';
 interface PendingCommand {
   resolve: (output: string) => void;
   reject: (error: Error) => void;
-  timeout: NodeJS.Timeout;
 }
 
 export class ShellExecutor implements IShellExecutor {
@@ -46,7 +45,6 @@ export class ShellExecutor implements IShellExecutor {
 
       const pending = this.pendingCommands.get(cmdId);
       if (pending) {
-        clearTimeout(pending.timeout);
         pending.resolve(output);
         this.pendingCommands.delete(cmdId);
       }
@@ -69,7 +67,7 @@ export class ShellExecutor implements IShellExecutor {
     this.handleError(error);
   }
 
-  public async execute(command: string, timeoutMs: number = 10000): Promise<string> {
+  public async execute(command: string, _: number): Promise<string> {
     return new Promise((resolve, reject) => {
       // 判断 shell 是否存在或者是否处于关闭状态
       if (!this.shell || this.shell.killed) {
@@ -78,12 +76,7 @@ export class ShellExecutor implements IShellExecutor {
       }
       const cmdId = (++this.commandCounter).toString();
 
-      const timeout = setTimeout(() => {
-        this.pendingCommands.delete(cmdId);
-        reject(new Error(`Command timed out after ${timeoutMs}ms`));
-      }, timeoutMs);
-
-      this.pendingCommands.set(cmdId, { resolve, reject, timeout });
+      this.pendingCommands.set(cmdId, { resolve, reject });
 
       // 添加唯一结束标记
       const fullCommand = `${command}; echo "__CMD_END_${cmdId}__"${EOL}`;
@@ -99,10 +92,6 @@ export class ShellExecutor implements IShellExecutor {
   }
 
   private cleanup(): void {
-    Array.from(this.pendingCommands.values()).forEach(pending => {
-      clearTimeout(pending.timeout);
-    });
     this.pendingCommands.clear();
   }
 }
-
