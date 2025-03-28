@@ -9,25 +9,26 @@ export class ShellExecutorProxy implements IShellExecutor {
   }
 
   public async execute(command: string, timeoutMs: number = 10000): Promise<string> {
-    // Create a timeout promise that rejects when time is up
+    let timeoutId: NodeJS.Timeout | undefined;
     const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => {
-        this.destroy().finally(() => {
-          this.executor = new ShellExecutor();
-          reject(new Error('Command timed out'));
-        });
+      timeoutId = setTimeout(async () => {
+        this.destroy();
+        this.executor = new ShellExecutor();
+        reject(new Error('Command timed out'));
       }, timeoutMs);
     });
 
-    // Race between the execution and the timeout
     try {
       const result = await Promise.race([
         this.executor.execute(command),
         timeoutPromise
       ]);
+
       return result;
     } catch (error) {
       throw error;
+    } finally {
+      clearTimeout(timeoutId);  // 成功执行时取消定时器
     }
   }
 
