@@ -14,31 +14,24 @@ A Model Context Protocol (MCP) server that provides shell command execution capa
 The shell-mcp server provides two main tools:
 
 1. **execute**: Execute a shell command
-   - Parameters:
-     - `command` (string): The shell command to execute
+   - Parameters: `command` (string): The shell command to execute
 
-2. **clearShellContext**: Clear the current shell context
-   - No parameters required
+2. **clearShellContext**: Clear the current shell context. No parameters required
 
 ### Configuration
-To make the LLMs interact with shell-mcp, you need to add the following configuration to your MCP configuration:
-1. Build the shell-mcp project:
-    ```bash
-    npm install shell-mcp
-    ```
-2. Add the following configuration to your MCP configuration:
-	```js
-	{
-	  "mcpServers": {
-	    "shellExecutor": {
-	      "isActive": true,
-	      "name": "shellExecutor",
-	      "description": "execute shell commands",
-	      "command": "npx",
-	      "args": [
-	        "shell-mcp"
-	      ]
-	    }
-	  }
-	}
-	```
+To make the LLMs interact with shell-mcp, you need to change the configuration of MCP as follows:
+```js
+{
+  "mcpServers": {
+    "shellExecutor": {
+      "isActive": true,
+      "name": "shellExecutor",
+      "description": "execute shell commands",
+      "command": "npx",
+      "args": [
+        "shell-mcp@latest"
+      ]
+    }
+  }
+}
+```
