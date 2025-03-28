@@ -3,14 +3,14 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { ShellExecutor } from "./shell.js";
+import { ShellExecutorProxy } from "./shell-executor-proxy.js";
 
 // Create an MCP server
 const server = new McpServer({
     name: "shell",
     version: "0.0.1",
 });
-let shell = new ShellExecutor();
+let shell = new ShellExecutorProxy();
 
 // Add an addition tool
 server.tool("execute", "execute a shell command",
@@ -26,7 +26,7 @@ server.tool("clearShellContext", "clear the shell context", {}, async () => {
     if (shell) {
         await shell.destroy();
     }
-    shell = new ShellExecutor();
+    shell = new ShellExecutorProxy();
     return {
         content: [{ type: "text", text: "Shell context cleared" }]
     }

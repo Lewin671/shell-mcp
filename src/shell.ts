@@ -1,5 +1,6 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import { EOL } from 'os';
+import { IShellExecutor } from './interfaces/shell.js';
 
 interface PendingCommand {
   resolve: (output: string) => void;
@@ -7,7 +8,7 @@ interface PendingCommand {
   timeout: NodeJS.Timeout;
 }
 
-export class ShellExecutor {
+export class ShellExecutor implements IShellExecutor {
   private shell: ChildProcessWithoutNullStreams;
   private buffer: string = '';
   private pendingCommands: Map<string, PendingCommand> = new Map();
