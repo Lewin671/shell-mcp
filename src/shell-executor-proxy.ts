@@ -8,7 +8,7 @@ export class ShellExecutorProxy implements IShellExecutor {
     this.executor = new ShellExecutor();
   }
 
-  public async execute(command: string, timeoutMs: number = 10000): Promise<string> {
+  public async execute(command: string, timeoutMs: number = 5000): Promise<string> {
     let timeoutId: NodeJS.Timeout | undefined;
     const timeoutPromise = new Promise<never>((_, reject) => {
       timeoutId = setTimeout(async () => {

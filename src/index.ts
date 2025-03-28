@@ -16,8 +16,21 @@ let shell = new ShellExecutorProxy();
 server.tool("execute", "execute a shell command",
     { command: z.string().optional() },
     async ({ command }) => {
-        return {
-            content: [{ type: "text", text: command ? await shell.execute(command) : "No command provided" }]
+        if (!command) {
+            return {
+                content: [{ type: "text", text: "No command provided" }]
+            }
+        }
+
+        try {
+            const result = await shell.execute(command);
+            return {
+                content: [{ type: "text", text: result }]
+            }
+        } catch (error) {
+            return {
+                content: [{ type: "text", text: `Command execution failed: ${error instanceof Error ? error.message : String(error)}` }]
+            }
         }
     }
 );
@@ -41,7 +54,6 @@ const main = async () => {
 
 main().catch(error => {
     console.error("Error:", error);
-    process.exit(1);
 });
 
 console.log("MCP server started");
